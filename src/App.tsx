@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import RootLayout from "./pages/RootLayout";
 import EditProfile from "./pages/EditProfile";
+import Profile from "./pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <EditProfile />,
+        element: <Profile />,
       },
     ],
   },
