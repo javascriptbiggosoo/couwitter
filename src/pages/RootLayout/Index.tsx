@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import Navigation from "../components/Navigation";
-import { auth } from "../firebase";
+import { Outlet } from "react-router-dom";
+import Navigation from "./Navigation";
+import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import Auth from "./Auth";
+import Auth from "../Auth";
 import { useRecoilState } from "recoil";
-import { currentUidState } from "../atoms";
+import { currentUidState } from "../../atoms";
 
 export default function RootLayout() {
   // 로딩도 따로 만들자
@@ -17,7 +17,7 @@ export default function RootLayout() {
       const uid = user.uid;
       console.log(user);
       setIsLoggedIn(true);
-      setCurrentUid(user.uid);
+      setCurrentUid(uid);
     } else {
       console.log("no user");
       setIsLoggedIn(false);

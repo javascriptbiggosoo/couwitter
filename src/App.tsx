@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home/Index";
-import RootLayout from "./pages/RootLayout";
+import RootLayout from "./pages/RootLayout/Index";
 import Profile from "./pages/Profile";
 import { RecoilRoot } from "recoil";
 
