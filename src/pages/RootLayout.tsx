@@ -4,21 +4,26 @@ import Navigation from "../components/Navigation";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Auth from "./Auth";
+import { useRecoilState } from "recoil";
+import { currentUidState } from "../atoms";
 
 export default function RootLayout() {
+  // 로딩도 따로 만들자
   const [isLoggedIn, setIsLoggedIn] = useState(auth.currentUser !== null);
+  const [currentUid, setCurrentUid] = useRecoilState(currentUidState);
 
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const uid = user.uid;
       console.log(user);
       setIsLoggedIn(true);
+      setCurrentUid(user.uid);
     } else {
       console.log("no user");
       setIsLoggedIn(false);
     }
   });
-  console.log(auth.currentUser);
+  // console.log(auth.currentUser);
   return (
     <>
       {isLoggedIn ? (

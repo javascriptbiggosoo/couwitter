@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Home from "./pages/Home";
+import Home from "./pages/Home/Index";
 import RootLayout from "./pages/RootLayout";
-import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
+import { RecoilRoot } from "recoil";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +22,11 @@ const router = createBrowserRouter([
   },
 ]);
 function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <RecoilRoot>
+      <RouterProvider router={router}></RouterProvider>
+    </RecoilRoot>
+  );
 }
 
 export default App;

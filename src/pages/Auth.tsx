@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSignupping, setIsSignupping] = useState(true);
+  const [isSignupping, setIsSignupping] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
