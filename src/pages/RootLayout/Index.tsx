@@ -6,10 +6,11 @@ import { onAuthStateChanged } from "firebase/auth";
 import Auth from "../Auth";
 import { useRecoilState } from "recoil";
 import { currentUidState } from "../../atoms";
+import Loading from "../../components/UI/Loading";
 
 export default function RootLayout() {
   // 로딩도 따로 만들자
-  const [isLoggedIn, setIsLoggedIn] = useState(auth.currentUser !== null);
+  const [isLoggedIn, setIsLoggedIn] = useState<null | boolean>(null);
   const [currentUid, setCurrentUid] = useRecoilState(currentUidState);
 
   onAuthStateChanged(auth, (user) => {
@@ -23,6 +24,7 @@ export default function RootLayout() {
       setIsLoggedIn(false);
     }
   });
+  if (isLoggedIn === null) return <Loading></Loading>;
   // console.log(auth.currentUser);
   return (
     <>
