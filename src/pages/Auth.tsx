@@ -7,7 +7,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import React, { useState } from "react";
-import { auth } from "../firebase";
+import { authService } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 export default function Auth() {
@@ -30,9 +30,13 @@ export default function Auth() {
     let data;
     try {
       if (isSignupping) {
-        data = await createUserWithEmailAndPassword(auth, email, password);
+        data = await createUserWithEmailAndPassword(
+          authService,
+          email,
+          password
+        );
       } else {
-        data = await signInWithEmailAndPassword(auth, email, password);
+        data = await signInWithEmailAndPassword(authService, email, password);
       }
     } catch (err) {
       let message = "Unknown Error";
@@ -44,7 +48,7 @@ export default function Auth() {
   const toggleAccount = () => setIsSignupping((prev) => !prev);
   const handleSocialClick = async (ev: React.MouseEvent<HTMLButtonElement>) => {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(authService, provider);
     console.log(result);
     const user = result.user;
   };

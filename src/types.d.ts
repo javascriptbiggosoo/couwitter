@@ -3,6 +3,7 @@ export interface ICouweet {
   text: string;
   id: string;
   creatorId: string;
+  attachmentUrl: string;
 }
 
 export interface CreatedAt {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
-import { auth } from "../../firebase";
+import { authService } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Auth from "../Auth";
 import { useRecoilState } from "recoil";
@@ -13,7 +13,7 @@ export default function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState<null | boolean>(null);
   const [currentUid, setCurrentUid] = useRecoilState(currentUidState);
 
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(authService, (user) => {
     if (user) {
       const uid = user.uid;
       console.log(user);

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { ICouweet } from "../../types.d";
 import styled from "styled-components";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { dbService, storageService } from "../../firebase";
+import { deleteObject, ref } from "firebase/storage";
 
 interface IProps {
   couweetObj: ICouweet;
@@ -17,14 +18,17 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newCouweet, setNewCouweet] = useState(couweetObj.text);
 
-  async function deleteCouweet(id: string) {
-    const couweetRef = doc(db, "couweets", id);
+  async function deleteCouweet(id: string, attachmentUrl: string) {
+    const couweetRef = doc(dbService, "couweets", id);
     await deleteDoc(couweetRef);
+ 
+    const urlRef = ref(storageService, attachmentUrl);
+    await deleteObject(urlRef);
   }
   const handleDeleteClick = () => {
     const ok = window.confirm("게시글을 지우시겠습니까?");
     ok &&
-      deleteCouweet(couweetObj.id)
+      deleteCouweet(couweetObj.id, couweetObj.attachmentUrl)
         .then(() => console.log("User deleted"))
         .catch((error) => console.error("Error deleting user: ", error));
   };
@@ -38,7 +42,7 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
   };
 
   const updateCouweet = async (id: string) => {
-    const couweetRef = doc(db, "couweets", id);
+    const couweetRef = doc(dbService, "couweets", id);
     await updateDoc(couweetRef, {
       text: newCouweet,
     });
@@ -51,7 +55,7 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
       .catch((error) => console.error("Error updating user: ", error));
   };
 
-  if (isEditing)
+  if (isOwner && isEditing)
     return (
       <Container>
         <form onSubmit={handleSubmit}>
@@ -70,6 +74,9 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
   return (
     <Container>
       <h4>{couweetObj.text}</h4>
+      {couweetObj.attachmentUrl && (
+        <img src={couweetObj.attachmentUrl} alt="" width="50px" height="auto" />
+      )}
       {isOwner && (
         <>
           <button onClick={handleDeleteClick}>지우기</button>

@@ -1,6 +1,6 @@
 import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../../firebase";
+import { dbService } from "../../firebase";
 import { ICouweet } from "../../types";
 import Couweet from "./Couweet";
 import { useRecoilValue } from "recoil";
@@ -11,7 +11,7 @@ export default function NewsFeed() {
   const currentUid = useRecoilValue(currentUidState);
 
   useEffect(() => {
-    const couweetCollection = collection(db, "couweets");
+    const couweetCollection = collection(dbService, "couweets");
     const unsubscribe = onSnapshot(couweetCollection, (snapshot) => {
       const newCouweets: ICouweet[] = snapshot.docs.map((doc) => ({
         ...doc.data(),
