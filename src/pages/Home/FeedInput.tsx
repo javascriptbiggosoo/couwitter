@@ -6,21 +6,25 @@ import { v4 as uuidv4 } from "uuid";
 
 import { currentUidState } from "../../atoms";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
-import { set } from "firebase/database";
 
 export default function FeedInput() {
   const [couweet, setCouweet] = useState("");
   const [attachment, setAttachment] = useState("");
   const currentUid = useRecoilValue(currentUidState);
 
-  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     let attachmentUrl = "";
-    if (attachment) {
+    const getAttachmentUrl = async (attachment: string) => {
       const storageRef = ref(storageService, `${currentUid!}/${uuidv4()}`);
       const snapshot = await uploadString(storageRef, attachment, "data_url");
       console.log(snapshot);
       attachmentUrl = await getDownloadURL(storageRef);
+    };
+
+    if (attachment) {
+      getAttachmentUrl(attachment).catch(console.error);
+      console.log(attachmentUrl);
     }
 
     addDoc(collection(dbService, "couweets"), {
@@ -60,7 +64,6 @@ export default function FeedInput() {
     setAttachment("");
   };
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form onSubmit={handleSubmit}>
       <input
         type="text"

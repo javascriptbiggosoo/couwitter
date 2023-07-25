@@ -1,6 +1,21 @@
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
-export const currentUidState = atom<string | null>({
-  key: "currentUidState",
+interface IUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+}
+
+export const currentUserState = atom<IUser | null>({
+  key: "currentUserState",
   default: null,
+});
+
+export const currentUidState = selector({
+  key: "currentUidState",
+  get: ({ get }) => {
+    const user = get(currentUserState);
+    return user?.uid;
+  },
 });
