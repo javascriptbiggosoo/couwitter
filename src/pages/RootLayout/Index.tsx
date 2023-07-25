@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
 import { authService } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import Auth from "../Auth";
+import Auth from "../Auth/Index";
 import { useRecoilState } from "recoil";
 import { currentUserState } from "../../atoms";
 import Loading from "../../components/UI/Loading";

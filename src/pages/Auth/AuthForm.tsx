@@ -1,21 +1,16 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
 } from "firebase/auth";
-import React, { useState } from "react";
-import { authService } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { authService } from "../../firebase";
 
-export default function Auth() {
+export default function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignupping, setIsSignupping] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     if (ev.target.name === "email") {
@@ -24,36 +19,35 @@ export default function Auth() {
       setPassword(ev.target.value);
     }
   };
-  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     // console.log(email, password);
-    let data;
-    try {
-      if (isSignupping) {
-        data = await createUserWithEmailAndPassword(
-          authService,
-          email,
-          password
-        );
-      } else {
-        data = await signInWithEmailAndPassword(authService, email, password);
+    const emailSignin = async (email: string, password: string) => {
+      let data;
+      try {
+        if (isSignupping) {
+          data = await createUserWithEmailAndPassword(
+            authService,
+            email,
+            password
+          );
+        } else {
+          data = await signInWithEmailAndPassword(authService, email, password);
+        }
+      } catch (err) {
+        let message = "Unknown Error";
+        if (err instanceof Error) message = err.message;
+        setError(message);
       }
-    } catch (err) {
-      let message = "Unknown Error";
-      if (err instanceof Error) message = err.message;
-      setError(message);
-    }
+    };
+    emailSignin(email, password).catch((err) => {
+      console.log(err);
+    });
     // console.log(data);
   };
   const toggleAccount = () => setIsSignupping((prev) => !prev);
-  const handleSocialClick = async (ev: React.MouseEvent<HTMLButtonElement>) => {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(authService, provider);
-    console.log(result);
-    const user = result.user;
-  };
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit}>
         <input
           name="email"
@@ -77,11 +71,6 @@ export default function Auth() {
       <span onClick={toggleAccount}>
         {isSignupping ? "로그인" : "계정 생성"}
       </span>
-      <div>
-        <button onClick={handleSocialClick} name="google">
-          Google 계정으로 이용하기
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
