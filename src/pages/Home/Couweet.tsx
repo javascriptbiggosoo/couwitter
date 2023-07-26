@@ -11,7 +11,16 @@ interface IProps {
 }
 
 const Container = styled.div`
+  position: relative;
   display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  background-color: white;
+  width: 100%;
+  max-width: 320px;
+  padding: 20px;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, 0.8);
 `;
 
 export default function Couweet({ couweetObj, isOwner }: IProps) {
@@ -21,7 +30,7 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
   async function deleteCouweet(id: string, attachmentUrl: string) {
     const couweetRef = doc(dbService, "couweets", id);
     await deleteDoc(couweetRef);
- 
+
     const urlRef = ref(storageService, attachmentUrl);
     await deleteObject(urlRef);
   }
@@ -57,7 +66,7 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
 
   if (isOwner && isEditing)
     return (
-      <Container>
+      <>
         <form onSubmit={handleSubmit}>
           <input
             onChange={handleChange}
@@ -68,7 +77,7 @@ export default function Couweet({ couweetObj, isOwner }: IProps) {
           <input type="submit" value="수정" />
         </form>
         <button onClick={handleEditClick}>취소</button>
-      </Container>
+      </>
     );
 
   return (

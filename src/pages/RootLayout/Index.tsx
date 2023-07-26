@@ -7,6 +7,20 @@ import Auth from "../Auth/Index";
 import { useRecoilState } from "recoil";
 import { currentUserState } from "../../atoms";
 import Loading from "../../components/UI/Loading";
+import { styled } from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  max-width: 890px;
+
+  margin: 0 auto;
+  margin-top: 80px;
+`;
 
 export default function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState<null | boolean>(null);
@@ -36,7 +50,7 @@ export default function RootLayout() {
   if (isLoggedIn === null) return <Loading></Loading>;
   // console.log(auth.currentUser);
   return (
-    <>
+    <Container>
       {isLoggedIn ? (
         <>
           <Navigation></Navigation>
@@ -45,6 +59,6 @@ export default function RootLayout() {
       ) : (
         <Auth></Auth>
       )}
-    </>
+    </Container>
   );
 }

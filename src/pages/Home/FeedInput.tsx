@@ -1,11 +1,13 @@
 import { addDoc, collection } from "firebase/firestore";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { dbService, storageService } from "../../firebase";
 import { useRecoilValue } from "recoil";
 import { v4 as uuidv4 } from "uuid";
 
 import { currentUidState } from "../../atoms";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { CouweetInput } from "../../components/CouweetInput";
+import { FormBtn } from "../../components/FormBtn";
 
 export default function FeedInput() {
   const [couweet, setCouweet] = useState("");
@@ -65,7 +67,7 @@ export default function FeedInput() {
   };
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <CouweetInput
         type="text"
         placeholder="무엇을 공유하시겠어요?"
         maxLength={300}
@@ -73,7 +75,7 @@ export default function FeedInput() {
         value={couweet}
       />
       <input type="file" accept="image/*" onChange={handleFileChange} />
-      <input type="submit" value="Couweet" />
+      <FormBtn type="submit" value="Couweet" />
       {attachment && (
         <div>
           <img src={attachment} alt="preview" width="auto" height="80px" />
